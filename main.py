@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import os
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
@@ -10,12 +11,14 @@ from aiogram.types import (
     BotCommandScopeAllPrivateChats,
 )
 
-from config import BOT_TOKEN
 from database import postgres, redis_db
 from handlers import group, private
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Tokenni to'g'ridan-to'g'ri Railway muhit o'zgaruvchisidan olamiz
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 
 async def set_bot_commands(bot: Bot) -> None:
@@ -41,6 +44,10 @@ async def set_bot_commands(bot: Bot) -> None:
 
 
 async def main() -> None:
+    if not BOT_TOKEN:
+        logger.error("BOT_TOKEN topilmadi! Railway Variables bo'limini tekshiring.")
+        return
+
     bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher()
 
