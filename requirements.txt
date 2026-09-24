@@ -1,5 +1,4 @@
 aiogram==3.13.1
 asyncpg>=0.30.0
-redis
-python-dotenv
-
+redis==5.0.8
+python-dotenv==1.0.1
