@@ -5,16 +5,16 @@ from aiogram import Bot
 from aiogram.exceptions import TelegramForbiddenError
 
 from config import DAY_VOTE_SECONDS, LOBBY_SECONDS, MIN_PLAYERS, NIGHT_SECONDS
-import inline
-import postgres
-import redis_db
-from states.game_states import (
+from game_states import (
     ROLE_DESCRIPTIONS_UZ,
     ROLE_NAMES_UZ,
     Phase,
     Role,
     build_role_list,
 )
+import inline
+import postgres
+import redis_db
 
 # Har bir guruhdagi faol o'yin uchun background task (davom etayotganini kuzatish uchun)
 _running_games: dict[int, asyncio.Task] = {}
@@ -115,11 +115,11 @@ async def force_start(bot: Bot, chat_id: int, requester_id: int) -> None:
   """Admin /start bilan lobbini muddatidan oldin boshlaydi."""
   state = await redis_db.load_game_state(chat_id)
   if not state or state["phase"] != Phase.LOBBY:
-    await bot.send_message(chat_id, "⚠️ Hozir faol ro'yxatdan o'tish yo'q.")
+    await bot.send_message(chat_id, "⚠️️ Hozir faol ro'yxatdan o'tish yo'q.")
     return
   if requester_id != state["admin_id"]:
     await bot.send_message(
-        chat_id, "⛔️ Faqat o'yinni boshlagan admin buni qila oladi."
+        chat_id, "⛔️️ Faqat o'yinni boshlagan admin buni qila oladi."
     )
     return
 
@@ -209,7 +209,7 @@ async def _run_night(bot: Bot, chat_id: int) -> None:
     elif role == Role.DOKTOR:
       kb = inline.player_choice_keyboard("night_doktor", players, chat_id)
       if kb.inline_keyboard:
-        await _safe_send(bot, int(uid), "👨‍⚕️ Bu kecha kimni davolaysiz?", kb)
+        await _safe_send(bot, int(uid), "👨‍‍⚕️ Bu kecha kimni davolaysiz?", kb)
     elif role == Role.KOMISSAR:
       kb = inline.player_choice_keyboard(
           "night_komissar", players, chat_id, exclude_user_id=int(uid)
