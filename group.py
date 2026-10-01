@@ -2,9 +2,10 @@ from aiogram import F, Router
 from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message
 
-from database import postgres, redis_db
+import postgres
+import redis_db
 from handlers import game_logic
-from states.game_states import Phase, ROLE_DESCRIPTIONS_UZ, ROLE_NAMES_UZ
+from states.game_states import ROLE_DESCRIPTIONS_UZ, ROLE_NAMES_UZ, Phase
 
 router = Router()
 router.message.filter(F.chat.type.in_({"group", "supergroup"}))
