@@ -5,7 +5,8 @@ from aiogram import Bot
 from aiogram.exceptions import TelegramForbiddenError
 
 from config import DAY_VOTE_SECONDS, LOBBY_SECONDS, MIN_PLAYERS, NIGHT_SECONDS
-from database import postgres, redis_db
+import postgres
+import redis_db
 from keyboards.inline import lobby_keyboard, player_choice_keyboard
 from states.game_states import ROLE_DESCRIPTIONS_UZ, ROLE_NAMES_UZ, Phase, Role, build_role_list
 
