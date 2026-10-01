@@ -1,6 +1,5 @@
+import os
 import asyncpg
-
-from config import DATABASE_URL
 
 _pool: asyncpg.Pool | None = None
 
@@ -8,7 +7,11 @@ _pool: asyncpg.Pool | None = None
 async def init_pool() -> None:
     """Dastur ishga tushganda bir marta chaqiriladi: connection pool ochadi va jadvallarni yaratadi."""
     global _pool
-    _pool = await asyncpg.create_pool(dsn=DATABASE_URL, min_size=1, max_size=10)
+    database_url = os.getenv("DATABASE_URL")
+    if not database_url:
+        raise ValueError("DATABASE_URL environment variable is not set!")
+    
+    _pool = await asyncpg.create_pool(dsn=database_url, min_size=1, max_size=10)
     await _create_tables()
 
 
