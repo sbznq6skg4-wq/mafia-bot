@@ -11,20 +11,18 @@ from aiogram.types import (
     BotCommandScopeAllPrivateChats,
 )
 
-# Fayllar papkada emas, alohida turgani uchun ularni to'g'ridan-to'g'ri chaqiramiz
+import group
 import postgres
+import private
 import redis_db
-from handlers import group, private
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Tokenni Render muhitidan (Environment variables) xavfsiz olamiz
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 
 async def set_bot_commands(bot: Bot) -> None:
-    """Shaxsiy chat va guruh chatlari uchun alohida buyruqlar menyusini o'rnatadi."""
     private_commands = [
         BotCommand(command="start", description="🔄 Botni qayta boshlash"),
         BotCommand(command="profile", description="👤 Mening profilim"),
@@ -35,19 +33,17 @@ async def set_bot_commands(bot: Bot) -> None:
 
     group_commands = [
         BotCommand(command="game", description="🎮 O'yin yaratish"),
-        BotCommand(command="start", description="▶️ O'yinni muddatidan oldin boshlash (admin)"),
+        BotCommand(command="start", description="▶️️ O'yinni muddatidan oldin boshlash (admin)"),
         BotCommand(command="roles", description="🎭 O'yin rollarini ko'rish"),
         BotCommand(command="leave", description="🚪 Ro'yxatdan chiqish"),
         BotCommand(command="stop", description="⛔️ O'yinni to'xtatish"),
     ]
     await bot.set_my_commands(commands=group_commands, scope=BotCommandScopeAllGroupChats())
 
-    logger.info("Bot buyruqlari (shaxsiy va guruh uchun alohida) o'rnatildi.")
-
 
 async def main() -> None:
     if not BOT_TOKEN:
-        logger.error("BOT_TOKEN topilmadi! Render muhitini tekshiring.")
+        logger.error("BOT_TOKEN topilmadi!")
         return
 
     bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
