@@ -2,7 +2,7 @@ from aiogram import F, Router
 from aiogram.filters import Command, CommandStart
 from aiogram.types import CallbackQuery, Message
 
-from database import postgres
+import postgres
 from handlers import game_logic
 
 router = Router()
