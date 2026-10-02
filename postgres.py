@@ -1,4 +1,3 @@
-import os
 import asyncpg
 
 _pool: asyncpg.Pool | None = None
@@ -7,9 +6,11 @@ _pool: asyncpg.Pool | None = None
 async def init_pool() -> None:
     """Dastur ishga tushganda bir marta chaqiriladi: connection pool ochadi va jadvallarni yaratadi."""
     global _pool
-    database_url = os.getenv("DATABASE_URL")
+    # Quyidagi qo'shtirnoq ichiga Render'dan olgan haqiqiy bazang havolasini yozasan:
+    database_url = "postgres://foydalanuvchi:parol@host:port/baza_nomi"
+    
     if not database_url:
-        raise ValueError("DATABASE_URL environment variable is not set!")
+        raise ValueError("DATABASE_URL topilmadi!")
     
     _pool = await asyncpg.create_pool(dsn=database_url, min_size=1, max_size=10)
     await _create_tables()
